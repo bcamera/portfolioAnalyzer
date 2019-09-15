@@ -1,7 +1,12 @@
 {% extends 'blog/base.html' %}
 
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas_datareader.data as web
+from datetime import datetime
 {% block content %}
-    <div class="post">
+<div class="post">
         {% if post.published_date %}
             <div class="date">
                 {{ post.published_date }}
@@ -12,5 +17,16 @@
         {% endif %}
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
-    </div>
+        Digite o código da ação
+        <input type="text" name="acao" id="acao" value="">
+        <button class="btn-primary" onclick="funcao()">Botao</button>
+        <p>{{acao}}</p>
+</div>
+<script>
+    function funcao(){
+       acao = document.getElementById('acao').value;
+       alert(acao);
+       window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/teste";
+    }
+</script>
 {% endblock %}
