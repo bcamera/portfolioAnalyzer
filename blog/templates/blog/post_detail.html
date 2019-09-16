@@ -1,10 +1,5 @@
 {% extends 'blog/base.html' %}
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas_datareader.data as web
-from datetime import datetime
 {% block content %}
 <div class="post">
         {% if post.published_date %}
@@ -17,15 +12,19 @@ from datetime import datetime
         {% endif %}
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
-        Digite o código da ação
-        <input type="text" name="acao" id="acao" value="">
-        <button class="btn-primary" onclick="funcao()">Botao</button>
-        <p>{{acao}}</p>
+        Digite o código das ações (pelo menos 2)
+        <br>
+        <input type="text" name="acao1" id="acao1" value="">
+        <br>
+        <input type="text" name="acao2" id="acao2" value="">
+        <br>
+        <input type="text" name="acao3" id="acao3" value="">
+        <button class="btn-primary" onclick="funcao()">Calcular Carteira</button>
 </div>
 <script>
     function funcao(){
        acao = document.getElementById('acao').value;
-       alert(acao);
+       //alert(acao);
        window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/teste";
     }
 </script>

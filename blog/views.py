@@ -13,7 +13,7 @@ from matplotlib import pylab
 from pylab import *
 import PIL, PIL.Image
 from io import BytesIO
-
+#import base64
 #from io import StringIO
 
 import pandas_datareader as web
@@ -24,7 +24,7 @@ from django.http import HttpResponse
 def carrega_dados(request, acao):
     start = datetime(2018, 1, 1)
     end = datetime(2018, 12, 31)
-    acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6', 'FESA4.SA', 'BPAN4.SA']
+    acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
     dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
     descreva = dados.describe()
 
@@ -39,7 +39,7 @@ def carrega_dados(request, acao):
     volatilidade_carteira = []
     sharpe_ratio = []
     numero_acoes = len(acoes)
-    numero_carteiras = 1000
+    numero_carteiras = 100000
     np.random.seed(101)
     for cada_carteira in range(numero_carteiras):
         peso = np.random.random(numero_acoes)
@@ -82,6 +82,21 @@ def carrega_dados(request, acao):
     pylab.close()
 
     return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+    #plt.tight_layout()
+
+    #buffer = BytesIO()
+    #plt.savefig(buffer, format='png')
+    #buffer.seek(0)
+    #image_png = buffer.getvalue()
+    #buffer.close()
+
+    #graphic = base64.b64encode(image_png)
+    #graphic = graphic.decode('utf-8')
+
+    #return render(request, 'graphic.html',{'graphic':graphic})
+    
+    
     #return render(request, 'blog/post_detail.html', {'acao' : response})
     #return HttpResponse(descreva)
 
