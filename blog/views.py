@@ -22,9 +22,11 @@ from django.http import HttpResponse
 
 # Create your views here.
 def carrega_dados(request, acao):
+    #acao1 = (request.GET['action'])
+    #acao2 = (request.GET['acao1'])
     start = datetime(2018, 1, 1)
     end = datetime(2018, 12, 31)
-    acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
+    acoes = [ acao+'.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
     dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
     descreva = dados.describe()
 
@@ -39,7 +41,7 @@ def carrega_dados(request, acao):
     volatilidade_carteira = []
     sharpe_ratio = []
     numero_acoes = len(acoes)
-    numero_carteiras = 100000
+    numero_carteiras = 1000
     np.random.seed(101)
     for cada_carteira in range(numero_carteiras):
         peso = np.random.random(numero_acoes)
@@ -65,7 +67,7 @@ def carrega_dados(request, acao):
     # vamos nomear as colunas do novo dataframe
     colunas = ['Retorno', 'Volatilidade', 'Sharpe Ratio'] + [acao+' Peso' for acao in acoes]
     df = df[colunas]
-    
+
     # plot frontier, max sharpe & min Volatility values with a scatterplot
     plt.style.use('seaborn-dark')
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
@@ -97,7 +99,7 @@ def carrega_dados(request, acao):
     #return render(request, 'graphic.html',{'graphic':graphic})
     
     
-    #return render(request, 'blog/post_detail.html', {'acao' : response})
+    #return render(request, 'blog/post_detail.html', {'acao1' : acao2 })
     #return HttpResponse(descreva)
 
 def post_list(request):

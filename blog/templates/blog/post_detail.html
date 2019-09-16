@@ -12,20 +12,24 @@
         {% endif %}
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
-        Digite o código das ações (pelo menos 2)
-        <br>
-        <input type="text" name="acao1" id="acao1" value="">
-        <br>
-        <input type="text" name="acao2" id="acao2" value="">
-        <br>
-        <input type="text" name="acao3" id="acao3" value="">
-        <button class="btn-primary" onclick="funcao()">Calcular Carteira</button>
+        <form action="javascript:funcao()">
+            Digite o código das ações (pelo menos 2)
+            <br>
+            <input type="text" name="acao1" id="acao1" value="">
+            <br>
+            <input type="text" name="acao2" id="acao2" value="">
+            <br>
+            <input type="text" name="acao3" id="acao3" value="">
+            <button class="btn-primary">Calcular Carteira</button>
+        </form>
 </div>
 <script>
     function funcao(){
-       acao = document.getElementById('acao').value;
+       acao1 = document.getElementById('acao1').value; 
+       acao2 = document.getElementById('acao2').value; 
+       acao3 = document.getElementById('acao3').value; 
        //alert(acao);
-       window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/teste";
+       window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao1+"/teste";
     }
 </script>
 {% endblock %}
