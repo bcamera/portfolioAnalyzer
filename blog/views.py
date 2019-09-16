@@ -67,14 +67,25 @@ def carrega_dados(request, acao):
     # vamos nomear as colunas do novo dataframe
     colunas = ['Retorno', 'Volatilidade', 'Sharpe Ratio'] + [acao+' Peso' for acao in acoes]
     df = df[colunas]
+    
+    # vamos identificar as variáveis de interesse
+    menor_volatilidade = df['Volatilidade'].min()
+    maior_sharpe = df['Sharpe Ratio'].max()
+
+    # vamos identificar os dois principais portfolios
+    carteira_sharpe = df.loc[df['Sharpe Ratio'] == maior_sharpe]
+    carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
     plt.style.use('seaborn-dark')
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
                     cmap='RdYlGn', edgecolors='black', figsize=(10, 8), grid=True)
+    plt.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
+    plt.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200 )
     plt.xlabel('Volatilidade')
     plt.ylabel('Retorno Esperado')
     plt.title('Fronteira Eficiente de Markowitz')
+    plt.show()
 
     buffer = BytesIO()
     canvas = pylab.get_current_fig_manager().canvas
@@ -83,21 +94,7 @@ def carrega_dados(request, acao):
     pilImage.save(buffer, "PNG")
     pylab.close()
 
-    return HttpResponse(buffer.getvalue(), content_type="image/png")
-
-    #plt.tight_layout()
-
-    #buffer = BytesIO()
-    #plt.savefig(buffer, format='png')
-    #buffer.seek(0)
-    #image_png = buffer.getvalue()
-    #buffer.close()
-
-    #graphic = base64.b64encode(image_png)
-    #graphic = graphic.decode('utf-8')
-
-    #return render(request, 'graphic.html',{'graphic':graphic})
-    
+    return HttpResponse(buffer.getvalue(), content_type="image/png")  
     
     #return render(request, 'blog/post_detail.html', {'acao1' : acao2 })
     #return HttpResponse(descreva)
