@@ -15,21 +15,14 @@
         <form action="javascript:funcao()">
             Digite o código das ações (pelo menos 2)
             <br>
-            <input type="text" name="acao1" id="acao1" value="">
-            <br>
-            <input type="text" name="acao2" id="acao2" value="">
-            <br>
-            <input type="text" name="acao3" id="acao3" value="">
+            <input type="text" name="acao" id="acao" value="">
             <button class="btn-primary">Calcular Carteira</button>
         </form>
 </div>
 <script>
     function funcao(){
-       acao1 = document.getElementById('acao1').value; 
-       acao2 = document.getElementById('acao2').value; 
-       acao3 = document.getElementById('acao3').value; 
-       //alert(acao);
-       window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao1+"/teste";
+       acao = document.getElementById('acao').value; 
+       window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/teste";
     }
 </script>
 {% endblock %}
