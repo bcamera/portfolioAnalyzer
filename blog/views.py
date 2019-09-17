@@ -31,7 +31,11 @@ def carrega_dados(request, acao):
     #for codigoAcao in acoes:
     #        codigoAcao = codigoAcao+'.SA'
     #acoes = codigoAcao
-    acoes = [ acoes[0]+'.SA', acoes[1]+'.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
+    listaAcoes = list()
+    for i in acoes:
+       listaAcoes.append(i+'.SA')
+    acoes = listaAcoes
+    #acoes = [ acoes[0]+'.SA', acoes[1]+'.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
     dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
     descreva = dados.describe()
 
@@ -90,6 +94,7 @@ def carrega_dados(request, acao):
     plt.xlabel('Volatilidade')
     plt.ylabel('Retorno Esperado')
     plt.title('Fronteira Eficiente de Markowitz')
+    plt.annotate('teste', xy=(0.2,0.1), xytext=(0.3,0.5), arrowprops=dict(facecolor='black', shrink=0.05),)
     plt.show()
 
     buffer = BytesIO()
