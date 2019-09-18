@@ -13,8 +13,6 @@ from matplotlib import pylab
 from pylab import *
 import PIL, PIL.Image
 from io import BytesIO
-#import base64
-#from io import StringIO
 
 import pandas_datareader as web
 from datetime import datetime
@@ -26,16 +24,13 @@ def carrega_dados(request, acao):
     #acao2 = (request.GET['acao1'])
     start = datetime(2018, 1, 1)
     end = datetime(2018, 12, 31)
-    acao = acao.upper()
-    acoes = acao.split(',')
-    #for codigoAcao in acoes:
-    #        codigoAcao = codigoAcao+'.SA'
-    #acoes = codigoAcao
-    listaAcoes = list()
-    for i in acoes:
-       listaAcoes.append(i+'.SA')
-    acoes = listaAcoes
-    #acoes = [ acoes[0]+'.SA', acoes[1]+'.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
+    #acao = acao.upper()
+    #acoes = acao.split(',')
+    #listaAcoes = list()
+    #for i in acoes:
+    #   listaAcoes.append(i+'.SA')
+    #acoes = listaAcoes
+    acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
     dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
     descreva = dados.describe()
 
@@ -108,6 +103,7 @@ def carrega_dados(request, acao):
     
     #return render(request, 'blog/post_detail.html', {'acao1' : acao2 })
     #return HttpResponse(descreva)
+
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')     

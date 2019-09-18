@@ -18,11 +18,16 @@
             <input type="text" name="acao" id="acao" value="">
             <button class="btn-primary">Calcular Carteira</button>
         </form>
+        <!--img src="http://bcamera.pythonanywhere.com/post/1/teste/fronteira_eficiente"-->
+        <div id="img_home"></div>
 </div>
 <script>
     function funcao(){
        acao = document.getElementById('acao').value; 
-       window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
+       var img = new Image()
+       img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
+       //window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
+       img_home.appendChild(img);         
     }
 </script>
 {% endblock %}
