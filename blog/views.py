@@ -18,19 +18,20 @@ import pandas_datareader as web
 from datetime import datetime
 from django.http import HttpResponse
 
+print_carteira_min_var = []
+
 # Create your views here.
 def carrega_dados(request, acao):
-    #acao1 = (request.GET['action'])
-    #acao2 = (request.GET['acao1'])
     start = datetime(2018, 1, 1)
-    end = datetime(2018, 12, 31)
+    #end = datetime(2018, 12, 31)
+    agora = datetime.now()
+    end = agora.strftime('%Y/%m/%d')
     acao = acao.upper()
     acoes = acao.split(',')
     listaAcoes = list()
     for i in acoes:
-       listaAcoes.append(i+'.SA')
+       listaAcoes.append(i.strip()+'.SA')
     acoes = listaAcoes
-    #acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
     dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
     descreva = dados.describe()
 
@@ -81,17 +82,42 @@ def carrega_dados(request, acao):
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
+    fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
     plt.style.use('seaborn-dark')
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
-                    cmap='RdYlGn', edgecolors='black', figsize=(10, 8), grid=True)
-    plt.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
-    plt.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200 )
-    plt.xlabel('Volatilidade')
-    plt.ylabel('Retorno Esperado')
-    plt.title('Fronteira Eficiente de Markowitz')
-    plt.annotate('teste', xy=(0.2,0.1), xytext=(0.3,0.5), arrowprops=dict(facecolor='black', shrink=0.05),)
+                    cmap='RdYlGn', edgecolors='black', figsize=(10, 8), grid=True, ax=ax1)
+    ax1.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
+    ax1.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
+    ax1.set_xlabel('Volatilidade')
+    ax1.set_ylabel('Retorno Esperado')
+
+    ax1.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Risco x Retorno'))
+
+    minimo = carteira_min_variancia['Retorno']
+    minimo = minimo.tolist()
+    risco = carteira_sharpe['Retorno'] 
+    risco = risco.tolist()
+
+    #ax2.plot([carteira_min_variancia,carteira_sharpe])
+    #ax2.plot(range(10), pylab.randn(10), range(10), pylab.randn(10))
+    #ax2 = plt.subplot2grid((3,2),(2, 0))
+    #ax2 = plt.bar(1, 2, 3,
+     #        bottom='teste', yerr='teste2')
+    #df.plot.bar(1,2,3, bottom='teste',yerr='teste2',ax=ax2)
+
+    #ax2.set_ylabel('Scores')    
+    #ax2.set_title('Scores by group and gender')
+    #ax2.set_xticks(1, ('G1', 'G2', 'G3', 'G4', 'G5'))
+    #ax2.set_yticks(np.arange(0, 81, 10))
+    #ax2.legend((ax2[0], 2), ('Men', 'Women'))
+
+    #https://matplotlib.org/gallery/lines_bars_and_markers/bar_stacked.html#sphx-glr-gallery-lines-bars-and-markers-bar-stacked-py
+    #ax2.set_frame_on(False)
+    #ax2.legend(loc='upper right', shadow=True, fontsize='x-large', labels=('Retorno ='+str(round(minimo[0],2)),'Retorno = '+str(round(risco[0],2))))
+
     plt.show()
 
+    #Constroi a imagem no buffer
     buffer = BytesIO()
     canvas = pylab.get_current_fig_manager().canvas
     canvas.draw()
