@@ -13,7 +13,8 @@
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
         <form action="javascript:funcao()">
-            Digite o código das ações (pelo menos 2)
+            Digite o código das ações (pelo menos 2 separados por vírgula)
+            Exemplo: petr4,vale3,abev3
             <br>
             <input type="text" name="acao" id="acao" value="">
             <button class="btn-primary">Calcular Carteira</button>
@@ -23,11 +24,11 @@
 </div>
 <script>
     function funcao(){
-       acao = document.getElementById('acao').value; 
-       var img = new Image()
-       img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
-       //window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
-       img_home.appendChild(img);         
+        let acao = document.getElementById('acao').alue; 
+        let img = new Image();
+        img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
+        //window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
+        img_home.appendChild(img);         
     }
 </script>
 {% endblock %}

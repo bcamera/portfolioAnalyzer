@@ -24,13 +24,13 @@ def carrega_dados(request, acao):
     #acao2 = (request.GET['acao1'])
     start = datetime(2018, 1, 1)
     end = datetime(2018, 12, 31)
-    #acao = acao.upper()
-    #acoes = acao.split(',')
-    #listaAcoes = list()
-    #for i in acoes:
-    #   listaAcoes.append(i+'.SA')
-    #acoes = listaAcoes
-    acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
+    acao = acao.upper()
+    acoes = acao.split(',')
+    listaAcoes = list()
+    for i in acoes:
+       listaAcoes.append(i+'.SA')
+    acoes = listaAcoes
+    #acoes = ['PETR4.SA', 'VALE3.SA', 'UNIP6.SA', 'FESA4.SA', 'BPAN4.SA']
     dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
     descreva = dados.describe()
 
