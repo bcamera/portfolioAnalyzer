@@ -85,7 +85,7 @@ def carrega_dados(request, acao):
     fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
     plt.style.use('seaborn-dark')
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
-                    cmap='RdYlGn', edgecolors='black', figsize=(10, 8), grid=True, ax=ax1)
+                    cmap='RdYlGn', edgecolors='black', figsize=(14, 11), grid=True, ax=ax1)
     ax1.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
     ax1.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
     ax1.set_xlabel('Volatilidade')

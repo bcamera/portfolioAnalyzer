@@ -21,10 +21,6 @@
         </form>
         <!--img src="http://bcamera.pythonanywhere.com/post/1/teste/fronteira_eficiente"-->
         <div id="img_home"></div>
-        <div id="legenda">
-            <input hidden disabled id="min_var" name="min_var" value="">
-            {{print_carteira_min_var}}
-        </div>
 </div>
 <script>
     function funcao(){
@@ -33,9 +29,6 @@
         img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
         //window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
         img_home.appendChild(img);         
-        let min_var = "{{print_carteira_min_var}}"
-        document.getElementById('min_var').value = min_var;
-        document.getElementById('min_var').removeAttribute('hidden');
     }
 </script>
 {% endblock %}
