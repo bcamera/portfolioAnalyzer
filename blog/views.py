@@ -93,6 +93,7 @@ def carrega_dados(request, acao):
 
     ax1.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Risco x Retorno'))
 
+    #Grafico Minima Variancia
     minimo = carteira_min_variancia['Retorno']
     minimo = minimo.tolist()
     risco = carteira_sharpe['Retorno']
@@ -131,6 +132,43 @@ def carrega_dados(request, acao):
 
     ax2.set_title("Mínima Variância")
 
+
+    #Grafico Maior Sharpe Rate
+    acaoMaiorRisc = []
+    for j in acoes:
+      acaoMaiorRisc.extend(carteira_sharpe[j+' Peso'].tolist())
+    map(float,acaoMaiorRisc)
+    data4 = [round(k,4) for k in acaoMaiorRisc]
+    data3 = [str(d) for d in data3]
+
+    recipe_Sharpe = []
+    for a,b in zip(acoes,data3):
+        recipe_Sharpe.append(a+' '+b)
+        
+    #ax2 = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))    
+
+    data3 = [float(x.split()[1]) for x in recipe_Sharpe]
+    ingredients_sharpe = [x.split()[0] for x in recipe_Sharpe]
+
+    def func(pct, allvals):
+        absolute = int(pct/100.*np.sum(allvals))
+        return "{:.2f}%".format(pct, absolute)
+
+
+    wedges, texts, autotexts = ax3.pie(data3, autopct=lambda pct: func(pct, data),
+                                      textprops=dict(color="w"))
+
+    ax3.legend(wedges, ingredients_sharpe,
+              title="Ações",
+              loc="center left",
+              bbox_to_anchor=(1, 0, 0.5, 1))
+
+    #plt.setp(autotexts, size=8, weight="bold")
+
+    ax3.set_title("Maior Retorno")
+
+   
+    
     plt.show()
 
     #Constroi a imagem no buffer
