@@ -82,10 +82,10 @@ def carrega_dados(request, acao):
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
-    fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1)
     plt.style.use('seaborn-dark')
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
-                    cmap='RdYlGn', edgecolors='black', figsize=(14, 11), grid=True, ax=ax1)
+                    cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax1)
     ax1.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
     ax1.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
     ax1.set_xlabel('Volatilidade')
@@ -102,7 +102,7 @@ def carrega_dados(request, acao):
     for j in acoes:
       acaoMinRisc.extend(carteira_min_variancia[j+' Peso'].tolist())
     map(float,acaoMinRisc)
-    data2 = [round(k,2) for k in acaoMinRisc]
+    data2 = [round(k,4) for k in acaoMinRisc]
     data = [str(d) for d in data2]
 
     recipe = []
@@ -114,40 +114,21 @@ def carrega_dados(request, acao):
     data = [float(x.split()[1]) for x in recipe]
     ingredients = [x.split()[0] for x in recipe]
 
-
     def func(pct, allvals):
         absolute = int(pct/100.*np.sum(allvals))
-        return "{:.1f}%\n({:d} g)".format(pct, absolute)
+        return "{:.2f}%".format(pct, absolute)
 
 
     wedges, texts, autotexts = ax2.pie(data, autopct=lambda pct: func(pct, data),
                                       textprops=dict(color="w"))
 
     ax2.legend(wedges, ingredients,
-              title="Ingredients",
+              title="Ações",
               loc="center left",
               bbox_to_anchor=(1, 0, 0.5, 1))
 
     #plt.setp(autotexts, size=8, weight="bold")
 
-
-
-    #data = [225, 90, 50, 60, 100, 5]
-    #wedges, texts = ax2.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
-    #bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
-    #kw = dict(arrowprops=dict(arrowstyle="-"),
-#	          bbox=bbox_props, zorder=0, va="center")
-	
-    #for i, p in enumerate(wedges):
-    #    ang = (p.theta2 - p.theta1)/2. + p.theta1
-    #    y = np.sin(np.deg2rad(ang))
-    #    x = np.cos(np.deg2rad(ang))
-    #    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
-    #    connectionstyle = "angle,angleA=0,angleB={}".format(ang)
-    #    kw["arrowprops"].update({"connectionstyle": connectionstyle})
-    #    ax2.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
-    #                horizontalalignment=horizontalalignment, **kw)
-	
     ax2.set_title("Mínima Variância")
 
     plt.show()
