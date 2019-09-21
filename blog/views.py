@@ -46,7 +46,7 @@ def carrega_dados(request, acao):
     volatilidade_carteira = []
     sharpe_ratio = []
     numero_acoes = len(acoes)
-    numero_carteiras = 1000
+    numero_carteiras = 10000
     np.random.seed(101)
     for cada_carteira in range(numero_carteiras):
         peso = np.random.random(numero_acoes)
@@ -97,33 +97,33 @@ def carrega_dados(request, acao):
     minimo = minimo.tolist()
     risco = carteira_sharpe['Retorno'] 
     risco = risco.tolist()
+    print(risco)
 
-   recipe = ["225 g flour",
-          "90 g sugar",
-          "1 egg",
-          "60 g butter",
-          "100 ml milk",
-          "1/2 package of yeast"]
+    acaoC = []
+    for j in acoes:
+      acaoC.extend(carteira_min_variancia[j+' Peso'].tolist())
+    map(float,acaoC)
+    data = [round(k,2) for k in acaoC]
 
-	data = [225, 90, 50, 60, 100, 5]
-	
-	wedges, texts = ax2.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
-	
-	bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
-	kw = dict(arrowprops=dict(arrowstyle="-"),
+    recipe = acoes
+
+    #data = [225, 90, 50, 60, 100, 5]
+    wedges, texts = ax2.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+    kw = dict(arrowprops=dict(arrowstyle="-"),
 	          bbox=bbox_props, zorder=0, va="center")
 	
-	for i, p in enumerate(wedges):
-	    ang = (p.theta2 - p.theta1)/2. + p.theta1
-	    y = np.sin(np.deg2rad(ang))
-	    x = np.cos(np.deg2rad(ang))
-	    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
-	    connectionstyle = "angle,angleA=0,angleB={}".format(ang)
-	    kw["arrowprops"].update({"connectionstyle": connectionstyle})
-	    ax2.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
-	                horizontalalignment=horizontalalignment, **kw)
+    for i, p in enumerate(wedges):
+        ang = (p.theta2 - p.theta1)/2. + p.theta1
+        y = np.sin(np.deg2rad(ang))
+        x = np.cos(np.deg2rad(ang))
+        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+        connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+        kw["arrowprops"].update({"connectionstyle": connectionstyle})
+        ax2.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
+                    horizontalalignment=horizontalalignment, **kw)
 	
-	ax2.set_title("Matplotlib bakery: A donut")
+    ax2.set_title("Mínima Variância")
 
     #ax2.plot([carteira_min_variancia,carteira_sharpe])
     #ax2.plot(range(10), pylab.randn(10), range(10), pylab.randn(10))
