@@ -95,52 +95,60 @@ def carrega_dados(request, acao):
 
     minimo = carteira_min_variancia['Retorno']
     minimo = minimo.tolist()
-    risco = carteira_sharpe['Retorno'] 
+    risco = carteira_sharpe['Retorno']
     risco = risco.tolist()
-    print(risco)
 
-    acaoC = []
+    acaoMinRisc = []
     for j in acoes:
-      acaoC.extend(carteira_min_variancia[j+' Peso'].tolist())
-    map(float,acaoC)
-    data = [round(k,2) for k in acaoC]
+      acaoMinRisc.extend(carteira_min_variancia[j+' Peso'].tolist())
+    map(float,acaoMinRisc)
+    data2 = [round(k,2) for k in acaoMinRisc]
+    data = [str(d) for d in data2]
 
-    recipe = acoes
+    recipe = []
+    for a,b in zip(acoes,data):
+        recipe.append(a+' '+b)
+        
+    #ax2 = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))    
+
+    data = [float(x.split()[1]) for x in recipe]
+    ingredients = [x.split()[0] for x in recipe]
+
+
+    def func(pct, allvals):
+        absolute = int(pct/100.*np.sum(allvals))
+        return "{:.1f}%\n({:d} g)".format(pct, absolute)
+
+
+    wedges, texts, autotexts = ax2.pie(data, autopct=lambda pct: func(pct, data),
+                                      textprops=dict(color="w"))
+
+    ax2.legend(wedges, ingredients,
+              title="Ingredients",
+              loc="center left",
+              bbox_to_anchor=(1, 0, 0.5, 1))
+
+    #plt.setp(autotexts, size=8, weight="bold")
+
+
 
     #data = [225, 90, 50, 60, 100, 5]
-    wedges, texts = ax2.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
-    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
-    kw = dict(arrowprops=dict(arrowstyle="-"),
-	          bbox=bbox_props, zorder=0, va="center")
+    #wedges, texts = ax2.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+    #bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+    #kw = dict(arrowprops=dict(arrowstyle="-"),
+#	          bbox=bbox_props, zorder=0, va="center")
 	
-    for i, p in enumerate(wedges):
-        ang = (p.theta2 - p.theta1)/2. + p.theta1
-        y = np.sin(np.deg2rad(ang))
-        x = np.cos(np.deg2rad(ang))
-        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
-        connectionstyle = "angle,angleA=0,angleB={}".format(ang)
-        kw["arrowprops"].update({"connectionstyle": connectionstyle})
-        ax2.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
-                    horizontalalignment=horizontalalignment, **kw)
+    #for i, p in enumerate(wedges):
+    #    ang = (p.theta2 - p.theta1)/2. + p.theta1
+    #    y = np.sin(np.deg2rad(ang))
+    #    x = np.cos(np.deg2rad(ang))
+    #    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+    #    connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+    #    kw["arrowprops"].update({"connectionstyle": connectionstyle})
+    #    ax2.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
+    #                horizontalalignment=horizontalalignment, **kw)
 	
     ax2.set_title("Mínima Variância")
-
-    #ax2.plot([carteira_min_variancia,carteira_sharpe])
-    #ax2.plot(range(10), pylab.randn(10), range(10), pylab.randn(10))
-    #ax2 = plt.subplot2grid((3,2),(2, 0))
-    #ax2 = plt.bar(1, 2, 3,
-     #        bottom='teste', yerr='teste2')
-    #df.plot.bar(1,2,3, bottom='teste',yerr='teste2',ax=ax2)
-
-    #ax2.set_ylabel('Scores')    
-    #ax2.set_title('Scores by group and gender')
-    #ax2.set_xticks(1, ('G1', 'G2', 'G3', 'G4', 'G5'))
-    #ax2.set_yticks(np.arange(0, 81, 10))
-    #ax2.legend((ax2[0], 2), ('Men', 'Women'))
-
-    #https://matplotlib.org/gallery/lines_bars_and_markers/bar_stacked.html#sphx-glr-gallery-lines-bars-and-markers-bar-stacked-py
-    #ax2.set_frame_on(False)
-    #ax2.legend(loc='upper right', shadow=True, fontsize='x-large', labels=('Retorno ='+str(round(minimo[0],2)),'Retorno = '+str(round(risco[0],2))))
 
     plt.show()
 
