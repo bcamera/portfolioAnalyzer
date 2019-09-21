@@ -138,16 +138,17 @@ def carrega_dados(request, acao):
     for j in acoes:
       acaoMaiorRisc.extend(carteira_sharpe[j+' Peso'].tolist())
     map(float,acaoMaiorRisc)
-    data4 = [round(k,4) for k in acaoMaiorRisc]
-    data3 = [str(d) for d in data3]
+    data3 = [round(k,4) for k in acaoMaiorRisc]
+    data4 = [str(d) for d in data3]
+
 
     recipe_Sharpe = []
-    for a,b in zip(acoes,data3):
+    for a,b in zip(acoes,data4):
         recipe_Sharpe.append(a+' '+b)
         
     #ax2 = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))    
 
-    data3 = [float(x.split()[1]) for x in recipe_Sharpe]
+    data4 = [float(x.split()[1]) for x in recipe_Sharpe]
     ingredients_sharpe = [x.split()[0] for x in recipe_Sharpe]
 
     def func(pct, allvals):
@@ -155,7 +156,7 @@ def carrega_dados(request, acao):
         return "{:.2f}%".format(pct, absolute)
 
 
-    wedges, texts, autotexts = ax3.pie(data3, autopct=lambda pct: func(pct, data),
+    wedges, texts, autotexts = ax3.pie(data4, autopct=lambda pct: func(pct, data4),
                                       textprops=dict(color="w"))
 
     ax3.legend(wedges, ingredients_sharpe,
