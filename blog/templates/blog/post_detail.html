@@ -40,7 +40,10 @@
         let acao = $('#acao').val(); 
         img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
         if (img.complete || img.readyState === 4) {
-          img_home.appendChild(img);         
+          img_home.appendChild(img);   
+         $('html, body').animate({
+              scrollTop: parseInt($("#img_home").offset().top)
+          }, 2000);      
           img_loading.innerHTML= "";         
         }
         else {
@@ -52,7 +55,10 @@
               img_home.innerHTML= "";
             }
             else {
-              img_home.appendChild(img);  
+              img_home.appendChild(img);
+               $('html, body').animate({
+                    scrollTop: parseInt($("#img_home").offset().top)
+                }, 2000);                 
               img_loading.innerHTML= "";  
             }
         })
