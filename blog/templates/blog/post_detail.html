@@ -26,15 +26,37 @@
         </form>
         <!--img src="http://bcamera.pythonanywhere.com/post/1/teste/fronteira_eficiente"-->
         <div id="img_home"></div>
+        <div id="img_loading"></div>
+        <div class="modal"></div>
 </div>
 <script>
     function funcao(){
-        let acao = document.getElementById('acao').value; 
-        let img = new Image();
+        
+        var img = new Image();
+        var loading = new Image();
+        img_home.innerHTML= "";
+        //var downloadingImage = $("<img>");
+        loading.src = "http://i.stack.imgur.com/FhHRx.gif";
+        let acao = $('#acao').val(); 
         img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
-        //window.location.href="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
-        img_home.innerHTML= "";         
-        img_home.appendChild(img);         
+        if (img.complete || img.readyState === 4) {
+          img_home.appendChild(img);         
+          img_loading.innerHTML= "";         
+        }
+        else {
+          img_loading.appendChild(loading); 
+          $(img).on('load',function (response, status, xhr) {
+            if (status == 'error') {
+              console.log('erro');
+              img_loading.innerHTML= "";
+              img_home.innerHTML= "";
+            }
+            else {
+              img_home.appendChild(img);  
+              img_loading.innerHTML= "";  
+            }
+        })
     }
+  }
 </script>
 {% endblock %}
