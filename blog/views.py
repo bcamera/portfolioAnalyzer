@@ -38,6 +38,9 @@ def carrega_dados(request, acao):
             dados = web.get_data_yahoo(tickerAtual, start, end)['Adj Close']
             print('dados')
             print(dados)
+            if dados.count() < 400:
+                listaAcoes.remove(i.strip()+'.SA')
+#                raise Exception('Ação com pouco historico')
         except RemoteDataError:
             listaAcoes.remove(i.strip()+'.SA')
             print('removido')
