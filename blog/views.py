@@ -15,6 +15,7 @@ import PIL, PIL.Image
 from io import BytesIO
 
 import pandas_datareader as web
+from pandas_datareader._utils import RemoteDataError
 from datetime import datetime
 from django.http import HttpResponse
 
@@ -30,10 +31,25 @@ def carrega_dados(request, acao):
     acoes = acao.split(',')
     listaAcoes = list()
     for i in acoes:
-       listaAcoes.append(i.strip()+'.SA')
+        tickerAtual = (i.strip()+'.SA')
+        print(tickerAtual)
+        listaAcoes.append(i.strip()+'.SA')
+        try:
+            dados = web.get_data_yahoo(tickerAtual, start, end)['Adj Close']
+            print('dados')
+            print(dados)
+        except RemoteDataError:
+            listaAcoes.remove(i.strip()+'.SA')
+            print('removido')
+            print(i)
+            continue
+
+    
     acoes = listaAcoes
-    dados = web.get_data_yahoo(acoes, start, end)['Adj Close']
+    print(acoes)
+    dados = (web.get_data_yahoo(acoes, start, end)['Adj Close'])
     descreva = dados.describe()
+        
 
     # calculo dos retornos diários e anuais
     retorno_diario = dados.pct_change()
