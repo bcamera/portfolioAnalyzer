@@ -17,6 +17,13 @@
         <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/sharpe/lecture/" target="_blank">Teoria do indice Sharpe</a><br>
         <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/markowitz/lecture/"target ="_blank">Teoria do portfólio moderno</a><br>
         <a href="https://www.udemy.com/python-para-financas-investimentos-analise-de-dados/" target="_blank"> Udemy - Python para Finanças</a><br><br>
+        {% if messages %}    
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}            
         <form action="javascript:funcao()">
             Digite o código das ações que deseja calcular os pesos necessários para a melhor relação de risco x retorno para o seu perfil (pelo menos 2 separados por vírgula)
             Exemplo: petr4,vale3,abev3
@@ -31,6 +38,14 @@
 </div>
 <script>
     function funcao(){
+
+        {% if messages %}
+            {% for message in messages %}
+             {% if message.tags %}  alert("{{ message }}") {% endif %}
+
+            {% endfor %}
+
+        {% endif %}
         
         var img = new Image();
         var loading = new Image();

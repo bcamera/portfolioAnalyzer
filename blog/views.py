@@ -4,6 +4,7 @@ from .models import Post
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
 from django.shortcuts import redirect
+from django.contrib import messages
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -85,27 +86,29 @@ def carrega_dados(request, acao):
     for contar,acao in enumerate(acoes):
         carteira[acao+' Peso'] = [Peso[contar] for Peso in peso_acoes]
 
-    # vamos transformar nosso dicionário em um dataframe
+    #transformar nosso dicionário em um dataframe
     df = pd.DataFrame(carteira)
 
-    # vamos nomear as colunas do novo dataframe
+    #nomear as colunas do novo dataframe
     colunas = ['Retorno', 'Volatilidade', 'Sharpe Ratio'] + [acao+' Peso' for acao in acoes]
     df = df[colunas]
     
-    # vamos identificar as variáveis de interesse
+    #identificar as variáveis de interesse
     menor_volatilidade = df['Volatilidade'].min()
     maior_sharpe = df['Sharpe Ratio'].max()
 
-    # vamos identificar os dois principais portfolios
+    #identificar os dois principais portfolios
     carteira_sharpe = df.loc[df['Sharpe Ratio'] == maior_sharpe]
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
-    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1)
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=2, ncols=1)
     plt.style.use('seaborn-dark')
+    
+    # chart 1 plot
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
                     cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax1)
-    ax1.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
+    ax1.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='green', marker='o', s=200)
     ax1.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
     ax1.set_xlabel('Volatilidade')
     ax1.set_ylabel('Retorno Esperado')
@@ -138,7 +141,7 @@ def carrega_dados(request, acao):
         absolute = int(pct/100.*np.sum(allvals))
         return "{:.2f}%".format(pct, absolute)
 
-
+    #chart 2 plot
     wedges, texts, autotexts = ax2.pie(data, autopct=lambda pct: func(pct, data),
                                       textprops=dict(color="w"))
 
@@ -175,9 +178,9 @@ def carrega_dados(request, acao):
         return "{:.2f}%".format(pct, absolute)
 
 
+    #chart 3 plot
     wedges, texts, autotexts = ax3.pie(data4, autopct=lambda pct: func(pct, data4),
                                       textprops=dict(color="w"))
-
     ax3.legend(wedges, ingredients_sharpe,
               title="Ações",
               loc="center left",
@@ -187,7 +190,29 @@ def carrega_dados(request, acao):
 
     ax3.set_title("Maior Retorno")
 
-   
+    #chart 4 plot
+    ax4.text(0.5, 0.5, 'hello', size=24, ha='center', va='center')
+    ax4.spines['top'].set_visible(False)
+    ax4.spines['right'].set_visible(False)
+
+    # X AXIS -BORDER
+    ax4.spines['bottom'].set_visible(False)
+    # BLUE
+    ax4.set_xticklabels([])
+    # RED
+    ax4.set_xticks([])
+    # RED AND BLUE TOGETHER
+    ax4.axes.get_xaxis().set_visible(False)
+
+    # Y AXIS -BORDER
+    ax4.spines['left'].set_visible(False)
+    # YELLOW
+    ax4.set_yticklabels([])
+    # GREEN
+    ax4.set_yticks([])
+    # YELLOW AND GREEN TOGHETHER
+    ax4.axes.get_yaxis().set_visible(False)
+    ax4.set_axis_off()
     
     plt.show()
 
@@ -199,6 +224,7 @@ def carrega_dados(request, acao):
     pilImage.save(buffer, "PNG")
     pylab.close()
 
+    messages.warning(request, 'Teste!')
     return HttpResponse(buffer.getvalue(), content_type="image/png")  
     
     #return render(request, 'blog/post_detail.html', {'acao1' : acao2 })
