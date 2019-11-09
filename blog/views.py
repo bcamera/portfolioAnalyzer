@@ -31,26 +31,34 @@ def carrega_dados(request, acao):
     acao = acao.upper()
     acoes = acao.split(',')
     listaAcoes = list()
+    listaInvalido = list()
+    listaInexistente = list()
     for i in acoes:
         tickerAtual = (i.strip()+'.SA')
-        print(tickerAtual)
+        #print(tickerAtual)
         listaAcoes.append(i.strip()+'.SA')
         try:
             dados = web.get_data_yahoo(tickerAtual, start, end)['Adj Close']
-            print('dados')
-            print(dados)
             if dados.count() < 400:
                 listaAcoes.remove(i.strip()+'.SA')
-#                raise Exception('Ação com pouco historico')
+                #messages.warning(request,'Código(s) sem histórico removido da análise '+i )
+                if (len(listaInvalido) == 0):
+                    listaInvalido.append(i.strip())
+                else:
+                    listaInvalido.append(i.strip())
+                #print(i)
         except RemoteDataError:
             listaAcoes.remove(i.strip()+'.SA')
-            print('removido')
-            print(i)
+            if (len(listaInexistente) == 0):
+                    listaInexistente.append(i.strip())
+            else:
+                    listaInexistente.append(i.strip())
+            #messages.warning(request,'Código(s) inválido removido da análise'+i )
             continue
 
     
     acoes = listaAcoes
-    print(acoes)
+    #print(acoes)
     dados = (web.get_data_yahoo(acoes, start, end)['Adj Close'])
     descreva = dados.describe()
         
@@ -102,18 +110,18 @@ def carrega_dados(request, acao):
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
-    fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=2, ncols=1)
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, ncols=1)
     plt.style.use('seaborn-dark')
     
     # chart 1 plot
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
-                    cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax1)
-    ax1.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='green', marker='o', s=200)
-    ax1.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
-    ax1.set_xlabel('Volatilidade')
-    ax1.set_ylabel('Retorno Esperado')
+                    cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax2)
+    ax2.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
+    ax2.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
+    ax2.set_xlabel('Volatilidade')
+    ax2.set_ylabel('Retorno Esperado')
 
-    ax1.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Risco x Retorno'))
+    ax2.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Risco x Retorno'))
 
     #Grafico Minima Variancia
     minimo = carteira_min_variancia['Retorno']
@@ -142,17 +150,17 @@ def carrega_dados(request, acao):
         return "{:.2f}%".format(pct, absolute)
 
     #chart 2 plot
-    wedges, texts, autotexts = ax2.pie(data, autopct=lambda pct: func(pct, data),
+    wedges, texts, autotexts = ax3.pie(data, autopct=lambda pct: func(pct, data),
                                       textprops=dict(color="w"))
 
-    ax2.legend(wedges, ingredients,
+    ax3.legend(wedges, ingredients,
               title="Ações",
               loc="center left",
               bbox_to_anchor=(1, 0, 0.5, 1))
 
     #plt.setp(autotexts, size=8, weight="bold")
 
-    ax2.set_title("Mínima Variância")
+    ax3.set_title("Mínima Variância")
 
 
     #Grafico Maior Sharpe Rate
@@ -179,40 +187,38 @@ def carrega_dados(request, acao):
 
 
     #chart 3 plot
-    wedges, texts, autotexts = ax3.pie(data4, autopct=lambda pct: func(pct, data4),
+    wedges, texts, autotexts = ax4.pie(data4, autopct=lambda pct: func(pct, data4),
                                       textprops=dict(color="w"))
-    ax3.legend(wedges, ingredients_sharpe,
+    ax4.legend(wedges, ingredients_sharpe,
               title="Ações",
               loc="center left",
               bbox_to_anchor=(1, 0, 0.5, 1))
 
     #plt.setp(autotexts, size=8, weight="bold")
 
-    ax3.set_title("Maior Retorno")
+    ax4.set_title("Maior Retorno")
 
     #chart 4 plot
-    ax4.text(0.5, 0.5, 'hello', size=24, ha='center', va='center')
-    ax4.spines['top'].set_visible(False)
-    ax4.spines['right'].set_visible(False)
+    ax1.text(0.5, 1.0, 'Relatório da análise da carteira', size=24, ha='center', va='top')
+    if (len(listaInexistente) > 0) or (len(listaInvalido) > 0):
+        ax1.text(0.0, 0.8, 'Os seguintes códigos foram removidos da análise:', size=10, color='red', ha='left', va='top')
+        ax1.text(0.0, 0.7, 'Código(s) inválidos:'+str(listaInexistente)[1:-1], size=10, color='red', ha='left', va='top')
+        ax1.text(0.0, 0.6, 'Código(s) sem histórico suficiente:'+str(listaInvalido)[1:-1], size=10, color='red', ha='left', va='top')
+    #ax1.text(0.5, 1.0, '', size=24, ha='center', va='top')
+    #ax1.text(0.5, 1.0, 'Análise da carteira', size=24, ha='center', va='top')
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
 
-    # X AXIS -BORDER
-    ax4.spines['bottom'].set_visible(False)
-    # BLUE
-    ax4.set_xticklabels([])
-    # RED
-    ax4.set_xticks([])
-    # RED AND BLUE TOGETHER
-    ax4.axes.get_xaxis().set_visible(False)
-
-    # Y AXIS -BORDER
-    ax4.spines['left'].set_visible(False)
-    # YELLOW
-    ax4.set_yticklabels([])
-    # GREEN
-    ax4.set_yticks([])
-    # YELLOW AND GREEN TOGHETHER
-    ax4.axes.get_yaxis().set_visible(False)
-    ax4.set_axis_off()
+    #removing labels
+    ax1.spines['bottom'].set_visible(False)
+    ax1.set_xticklabels([])
+    ax1.set_xticks([])
+    ax1.axes.get_xaxis().set_visible(False)
+    ax1.spines['left'].set_visible(False)
+    ax1.set_yticklabels([])
+    ax1.set_yticks([])
+    ax1.axes.get_yaxis().set_visible(False)
+    ax1.set_axis_off()
     
     plt.show()
 
@@ -224,7 +230,6 @@ def carrega_dados(request, acao):
     pilImage.save(buffer, "PNG")
     pylab.close()
 
-    messages.warning(request, 'Teste!')
     return HttpResponse(buffer.getvalue(), content_type="image/png")  
     
     #return render(request, 'blog/post_detail.html', {'acao1' : acao2 })

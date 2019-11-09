@@ -38,14 +38,6 @@
 </div>
 <script>
     function funcao(){
-
-        {% if messages %}
-            {% for message in messages %}
-             {% if message.tags %}  alert("{{ message }}") {% endif %}
-
-            {% endfor %}
-
-        {% endif %}
         
         var img = new Image();
         var loading = new Image();
