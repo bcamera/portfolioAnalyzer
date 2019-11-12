@@ -81,7 +81,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         //var downloadingImage = $("<img>");
         loading.src = "http://i.stack.imgur.com/FhHRx.gif";
         let acao = $('#acao').val(); 
-        img.src ="http://bcamera.pythonanywhere.com/post/1/"+acao+"/fronteira_eficiente";
+        img.src ="http://bcamera.pythonanywhere.com/"+acao+"/fronteira_eficiente";
         if (img.complete || img.readyState === 4) {
           img_home.appendChild(img);   
          $('html, body').animate({
