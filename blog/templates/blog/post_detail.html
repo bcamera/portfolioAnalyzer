@@ -1,40 +1,66 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Analisador de Carteira de ações</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="agent.html" class="nav-link">Agent</a></li>
+            <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+            <li class="nav-item"><a href="properties.html" class="nav-link">Properties</a></li>
+            <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+    
+    <div class="hero-wrap ftco-degree-bg" style="background-image: url('../../static/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text justify-content-center align-items-center">
+          <div class="col-lg-8 col-md-6 ftco-animate d-flex align-items-end">
+            <div class="text text-center">
+              <h1 class="mb-4" style="color: aqua;">O modo mais simples <br>de analisar sua carteira</h1>
+              <p style="font-size: 20px; color: aqua">Preencha o campo abaixo com códigos de ação que fazem parte ou gostaria que fizesse parte de sua carteira. </p>
+              <form action="javascript:funcao()" class="search-location mt-md-5">
+                <div class="row justify-content-center">
+                  <div class="col-lg-10 align-items-end">
+                    <div class="form-group">
+                      <div class="form-field">
+                        <input type="text" id="acao" name="acao" class="form-control" placeholder="Exemplo: vale3, abev3, egie3, itsa3">
+                        <button><span class="ion-ios-search"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
-        {% endif %}
-        {% if user.is_authenticated %}
-          <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        {% endif %}
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.text|linebreaksbr }}</p>
-        <h4>Referências:</h4>
-        <a href="http://www.b3.com.br/pt_br/noticias/relacionamento.htm" target="_blank">b3</a><br>
-        <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/sharpe/lecture/" target="_blank">Teoria do indice Sharpe</a><br>
-        <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/markowitz/lecture/"target ="_blank">Teoria do portfólio moderno</a><br>
-        <a href="https://www.udemy.com/python-para-financas-investimentos-analise-de-dados/" target="_blank"> Udemy - Python para Finanças</a><br><br>
-        {% if messages %}    
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}            
-        <form action="javascript:funcao()">
-            Digite o código das ações que deseja calcular os pesos necessários para a melhor relação de risco x retorno para o seu perfil (pelo menos 2 separados por vírgula)
-            Exemplo: petr4,vale3,abev3
-            <br>
-            <input type="text" name="acao" id="acao" value="">
-            <button class="btn-primary">Calcular Carteira</button>
-        </form>
-        <!--img src="http://bcamera.pythonanywhere.com/post/1/teste/fronteira_eficiente"-->
-        <div id="img_home"></div>
-        <div id="img_loading"></div>
-        <div class="modal"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+<br>
+<br>
+<br>
+<div>
+  <div id="img_home"></div>
+  <div id="img_loading"></div>
+  
+  <h4>Referências:</h4>
+  <a href="http://www.b3.com.br/pt_br/noticias/relacionamento.htm" target="_blank">b3</a><br>
+  <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/sharpe/lecture/" target="_blank">Teoria do indice Sharpe</a><br>
+  <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/markowitz/lecture/"target ="_blank">Teoria do portfólio moderno</a><br>
+  <a href="https://www.udemy.com/python-para-financas-investimentos-analise-de-dados/" target="_blank"> Udemy - Python para Finanças</a><br><br>
+  <!--img src="http://bcamera.pythonanywhere.com/post/1/teste/fronteira_eficiente"-->
 </div>
 <script>
     function funcao(){
