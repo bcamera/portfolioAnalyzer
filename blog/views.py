@@ -110,23 +110,24 @@ def carrega_dados(request, acao):
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
-    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(nrows=5, ncols=1)
+    fig, (ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(nrows=6, ncols=1)
     plt.style.use('seaborn-dark')
     
-    ax5.plot(dados.index, dados.values)
-    ax5.set_xlabel('Data')
-    ax5.set_ylabel('Preco de Fechamento (R$)')
-    ax5.legend(dados.columns)
+    #chart 2 com o historico das ações
+    ax2.plot(dados.index, dados.values)
+    ax2.set_xlabel('Data')
+    ax2.set_ylabel('Preco de Fechamento (R$)')
+    ax2.legend(dados.columns)
     
-    # chart 1 plot
+    # chart 3 plot - com as 2 carteiras
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
-                    cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax2)
-    ax2.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
-    ax2.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
-    ax2.set_xlabel('Volatilidade')
-    ax2.set_ylabel('Retorno Esperado')
+                    cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax4)
+    ax4.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
+    ax4.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
+    ax4.set_xlabel('Volatilidade')
+    ax4.set_ylabel('Retorno Esperado')
 
-    ax2.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Risco x Retorno'))
+    ax4.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Risco x Retorno'))
 
     #Grafico Minima Variancia
     minimo = carteira_min_variancia['Retorno']
@@ -154,18 +155,18 @@ def carrega_dados(request, acao):
         absolute = int(pct/100.*np.sum(allvals))
         return "{:.2f}%".format(pct, absolute)
 
-    #chart 2 plot
-    wedges, texts, autotexts = ax3.pie(data, autopct=lambda pct: func(pct, data),
+    #chart 4 - Minima variancia
+    wedges, texts, autotexts = ax5.pie(data, autopct=lambda pct: func(pct, data),
                                       textprops=dict(color="w"))
 
-    ax3.legend(wedges, ingredients,
+    ax5.legend(wedges, ingredients,
               title="Ações",
               loc="center left",
               bbox_to_anchor=(1, 0, 0.5, 1))
 
     #plt.setp(autotexts, size=8, weight="bold")
 
-    ax3.set_title("Mínima Variância")
+    ax5.set_title("Mínima Variância")
 
 
     #Grafico Maior Sharpe Rate
@@ -191,34 +192,36 @@ def carrega_dados(request, acao):
         return "{:.2f}%".format(pct, absolute)
 
 
-    #chart 3 plot
-    wedges, texts, autotexts = ax4.pie(data4, autopct=lambda pct: func(pct, data4),
+    #chart 5 plot - Maior Sharpe
+    wedges, texts, autotexts = ax6.pie(data4, autopct=lambda pct: func(pct, data4),
                                       textprops=dict(color="w"))
-    ax4.legend(wedges, ingredients_sharpe,
+    ax6.legend(wedges, ingredients_sharpe,
               title="Ações",
               loc="center left",
               bbox_to_anchor=(1, 0, 0.5, 1))
 
     #plt.setp(autotexts, size=8, weight="bold")
 
-    ax4.set_title("Maior Retorno")
+    ax6.set_title("Maior Retorno")
 
-    #chart 4 plot
+    #chart 1 plot - Texto
     ax1.text(0.5, 1.0, 'Relatório da análise da carteira', size=24, ha='center', va='top')
     if (len(listaInexistente) > 0) or (len(listaInvalido) > 0):
         ax1.text(0.0, 0.8, 'Os seguintes códigos foram removidos da análise:', size=10, color='red', ha='left', va='top')
         ax1.text(0.0, 0.7, 'Código(s) inválidos:'+str(listaInexistente)[1:-1], size=10, color='red', ha='left', va='top')
         ax1.text(0.0, 0.6, 'Código(s) sem histórico suficiente:'+str(listaInvalido)[1:-1], size=10, color='red', ha='left', va='top')
-    ax1.text(0.0, 0.5, 'AA carteira a ser analisada é composta de '+str(len(listaAcoes))+' ações, sendo que durante o período analisado, tivemos um retorno anual de ' +str(round(carteira_min_variancia['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%.', size=10, ha='left', va='top')
-    ax1.text(0.0, 0.3, 'Já na carteira com o maior risco e retorno esperado, tivemos um retorno anual de ' +str(round(carteira_sharpe['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%, tomando como base o ponto', size=10, ha='left', va='top')
-    ax1.text(0.0, 0.4, 'tomando como base o ponto azul no gráfico abaixo, que é a carteira de menor risco, ou seja menor variação de preços.', size=10, ha='left', va='top')
-    ax1.text(0.0, 0.2, 'vermelho no gráfico abaixo, que é a carteira de maior risco e retorno esperado.', size=10, ha='left', va='top')
+    #ax1.text(0.0, 0.5, 'A carteira a ser analisada é composta de '+str(len(listaAcoes))+' ações, sendo que durante o período analisado, tivemos um retorno anual de ' +str(round(carteira_min_variancia['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%.', size=10, ha='left', va='top')
+    ax1.text(0.0, 0.5, 'A carteira a ser analisada é composta de '+str(len(listaAcoes))+' ações, sendo que durante o período analisado, podemos ver como cada ação se comportou no gráfico abaixo :', size=10, ha='left', va='top')
+    #ax1.text(0.0, 0.4, 'Na carteira de menor risco, o ponto azul no gráfico abaixo, tivemos um retorno anual de ' +str(round(carteira_min_variancia['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%.', size=10, ha='left', va='top')
+    #ax1.text(0.0, 0.3, 'tomando como base o ponto azul no gráfico abaixo, que é a carteira de menor risco, ou seja menor variação de preços.', size=10, ha='left', va='top')
+    #ax1.text(0.0, 0.3, 'Já na carteira com o maior risco e retorno esperado, tivemos um retorno anual de ' +str(round(carteira_sharpe['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%, tomando como base o ponto', size=10, ha='left', va='top')  
+    #ax1.text(0.0, 0.2, 'vermelho no gráfico abaixo, que é a carteira de maior risco e retorno esperado.', size=10, ha='left', va='top')
     #ax1.text(0.5, 1.0, '', size=24, ha='center', va='top')
     #ax1.text(0.5, 1.0, 'Análise da carteira', size=24, ha='center', va='top')
-    ax1.spines['top'].set_visible(False)
-    ax1.spines['right'].set_visible(False)
 
     #removing labels
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
     ax1.spines['bottom'].set_visible(False)
     ax1.set_xticklabels([])
     ax1.set_xticks([])
@@ -228,6 +231,25 @@ def carrega_dados(request, acao):
     ax1.set_yticks([])
     ax1.axes.get_yaxis().set_visible(False)
     ax1.set_axis_off()
+    
+    #chart 3 plot - Texto
+    ax3.text(0.0, 0.4, 'Na carteira de menor risco, o ponto azul no gráfico abaixo, tivemos um retorno anual de ' +str(round(carteira_min_variancia['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%.', size=10, ha='left', va='top')
+    #ax3.text(0.0, 0.3, 'tomando como base o ponto azul no gráfico abaixo, que é a carteira de menor risco, ou seja menor variação de preços.', size=10, ha='left', va='top')
+    ax3.text(0.0, 0.3, 'Já na carteira com o maior risco e retorno esperado, tivemos um retorno anual de ' +str(round(carteira_sharpe['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%, tomando como base o ponto', size=10, ha='left', va='top')  
+    ax3.text(0.0, 0.2, 'vermelho no gráfico abaixo, que é a carteira de maior risco e retorno esperado.', size=10, ha='left', va='top')
+
+    #removing labels
+    ax3.spines['top'].set_visible(False)
+    ax3.spines['right'].set_visible(False)
+    ax3.spines['bottom'].set_visible(False)
+    ax3.set_xticklabels([])
+    ax3.set_xticks([])
+    ax3.axes.get_xaxis().set_visible(False)
+    ax3.spines['left'].set_visible(False)
+    ax3.set_yticklabels([])
+    ax3.set_yticks([])
+    ax3.axes.get_yaxis().set_visible(False)
+    ax3.set_axis_off()    
     
     plt.show()
 
