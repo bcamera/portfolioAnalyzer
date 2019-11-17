@@ -110,8 +110,13 @@ def carrega_dados(request, acao):
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     # plot frontier, max sharpe & min Volatility values with a scatterplot
-    fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, ncols=1)
+    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(nrows=5, ncols=1)
     plt.style.use('seaborn-dark')
+    
+    ax5.plot(dados.index, dados.values)
+    ax5.set_xlabel('Data')
+    ax5.set_ylabel('Preco de Fechamento (R$)')
+    ax5.legend(dados.columns)
     
     # chart 1 plot
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
@@ -204,7 +209,7 @@ def carrega_dados(request, acao):
         ax1.text(0.0, 0.8, 'Os seguintes códigos foram removidos da análise:', size=10, color='red', ha='left', va='top')
         ax1.text(0.0, 0.7, 'Código(s) inválidos:'+str(listaInexistente)[1:-1], size=10, color='red', ha='left', va='top')
         ax1.text(0.0, 0.6, 'Código(s) sem histórico suficiente:'+str(listaInvalido)[1:-1], size=10, color='red', ha='left', va='top')
-    ax1.text(0.0, 0.5, 'A carteira a ser analisada é composta de '+str(len(listaAcoes))+' ações, sendo que durante o período analisado, tivemos um retorno anual de ' +str(round(carteira_min_variancia['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%.', size=10, ha='left', va='top')
+    ax1.text(0.0, 0.5, 'AA carteira a ser analisada é composta de '+str(len(listaAcoes))+' ações, sendo que durante o período analisado, tivemos um retorno anual de ' +str(round(carteira_min_variancia['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%.', size=10, ha='left', va='top')
     ax1.text(0.0, 0.3, 'Já na carteira com o maior risco e retorno esperado, tivemos um retorno anual de ' +str(round(carteira_sharpe['Retorno']*100,2)).split('\n',1)[0].split(' ',1)[1].strip()+'%, tomando como base o ponto', size=10, ha='left', va='top')
     ax1.text(0.0, 0.4, 'tomando como base o ponto azul no gráfico abaixo, que é a carteira de menor risco, ou seja menor variação de preços.', size=10, ha='left', va='top')
     ax1.text(0.0, 0.2, 'vermelho no gráfico abaixo, que é a carteira de maior risco e retorno esperado.', size=10, ha='left', va='top')
