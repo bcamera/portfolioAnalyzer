@@ -8011,10 +8011,10 @@ a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
-  color: #e86ed0; }
+  color: black; }
   a:hover, a:focus {
     text-decoration: none;
-    color: #e86ed0;
+    color: blue;
     outline: none !important; }
 
 h1, h2, h3, h4, h5,
@@ -8226,7 +8226,7 @@ h1, h2, h3, h4, h5,
     background: -o-linear-gradient(top, white 0%, white 3%, rgba(255, 255, 255, 0) 54%, rgba(255, 255, 255, 0) 100%);
     background: -ms-linear-gradient(top, white 0%, white 3%, rgba(255, 255, 255, 0) 54%, rgba(255, 255, 255, 0) 100%);
     background: -webkit-gradient(linear, left top, left bottom, from(white), color-stop(3%, white), color-stop(54%, rgba(255, 255, 255, 0)), to(rgba(255, 255, 255, 0)));
-    background: linear-gradient(to bottom, white 0%, white 3%, rgba(255, 255, 255, 0) 54%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(to bottom, black 0%, black 3%, rgba(255, 255, 255, 0) 54%, rgba(255, 255, 255, 0) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
     height: 850px; }
   .hero-wrap.hero-wrap-2 {
@@ -8324,7 +8324,7 @@ h1, h2, h3, h4, h5,
     width: 70px;
     height: 70px;
     border-radius: 0 50% 50% 50%;
-    background: #e86ed0; }
+    background: #168816; }
     .search-location .form-group button span {
       font-size: 30px;
       color: #fff; }

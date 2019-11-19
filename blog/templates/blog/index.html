@@ -3,12 +3,12 @@
 {% block content %}
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Analisador de Carteira de ações</a>
+        <a class="navbar-brand" style="color:white"  href="index.html">Analisador de Carteira de ações</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="oi oi-menu"></span> Menu
         </button>
 
-        <div class="collapse navbar-collapse" id="ftco-nav">
+        <div class="collapse navbar-collapse" style="visibility:hidden;" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
             <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
@@ -29,17 +29,18 @@
         <div class="row no-gutters slider-text justify-content-center align-items-center">
           <div class="col-lg-8 col-md-6 ftco-animate d-flex align-items-end">
             <div class="text text-center">
-              <h1 class="mb-4" style="color: aqua;">O modo mais simples <br>de analisar sua carteira</h1>
-              <p style="font-size: 20px; color: aqua">Preencha o campo abaixo com códigos de ação que fazem parte ou gostaria que fizesse parte de sua carteira. </p>
+              <h1 class="mb-4" style="color: white;">O modo mais simples <br>de analisar sua carteira</h1>
+              <p style="font-size: 20px; color: white">Preencha o campo abaixo com códigos de ação que fazem parte ou gostaria que fizesse parte de sua carteira. </p>
               <form action="javascript:funcao()" class="search-location mt-md-5">
                 <div class="row justify-content-center">
                   <div class="col-lg-10 align-items-end">
                     <div class="form-group">
                       <div class="form-field">
-                        <input type="text" id="acao" name="acao" class="form-control" placeholder="Exemplo: vale3, abev3, egie3, itsa3">
+                        <input type="text" id="acao" name="acao" class="form-control" placeholder="Exemplo: petr4, abev3, egie3, itsa3">
                         <button><span class="ion-ios-search"></span></button>
                       </div>
                     </div>
+                    <p style="font-size: 20px; color: #ffd630">Obs: Isso não é uma recomendação e rentabilidade histórica não representa garantia de rentabilidade futura. </p>
                   </div>
                 </div>
               </form>
@@ -58,7 +59,7 @@
       <div id="img_loading"></div>
 
       <h4>Referências:</h4>
-      <a href="http://www.b3.com.br/pt_br/noticias/relacionamento.htm" target="_blank">b3</a><br>
+      <a href="http://www.b3.com.br/pt_br/noticias/relacionamento.htm" target="_blank">B3</a><br>
       <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/sharpe/lecture/" target="_blank">Teoria do indice Sharpe</a><br>
       <a href="https://www.nobelprize.org/prizes/economic-sciences/1990/markowitz/lecture/"target ="_blank">Teoria do portfólio moderno</a><br>
       <a href="https://www.udemy.com/python-para-financas-investimentos-analise-de-dados/" target="_blank"> Udemy - Python para Finanças</a><br><br>
