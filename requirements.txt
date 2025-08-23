@@ -24,3 +24,4 @@ sqlparse
 urllib3
 virtualenv
 wrapt
+yfinance

@@ -12,7 +12,7 @@
 ## Installing
   Run the following:<br>
   <ul>
-  <li>git clone https://github.com/bcamera/blog-python/</li>
+  <li>git clone https://github.com/bcamera/portfolioAnalyzer/</li>
   <li>pip3 install -r requirements.txt</li>
   </ul>  
  
