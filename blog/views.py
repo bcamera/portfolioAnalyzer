@@ -94,7 +94,7 @@ def carrega_dados(request, acao):
     carteira_min_variancia = df.loc[df['Volatilidade'] == menor_volatilidade]
 
     fig, (ax1, ax2, ax3, ax4, ax5, ax6, ax7) = plt.subplots(nrows=7, ncols=1)
-    plt.style.use('dark_background')
+    # plt.style.use('dark_background')
     
     ax2.plot(dados.index, dados.values)
     ax2.set_xlabel('Data')
@@ -103,17 +103,18 @@ def carrega_dados(request, acao):
     
     df.plot.scatter(x='Volatilidade', y='Retorno', c='Sharpe Ratio',
                     cmap='RdYlGn', edgecolors='black', figsize=(11, 18), grid=True, ax=ax4)
-    ax4.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200)
-    ax4.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200)
+    ax4.scatter(x=carteira_sharpe['Volatilidade'], y=carteira_sharpe['Retorno'], c='red', marker='o', s=200, label='Maior Retorno')
+    ax4.scatter(x=carteira_min_variancia['Volatilidade'], y=carteira_min_variancia['Retorno'], c='blue', marker='o', s=200, label='Mínima Variância')
     ax4.set_xlabel('Volatilidade')
     ax4.set_ylabel('Retorno Esperado')
-
-    ax4.legend(loc='best', shadow=True, fontsize='x-large', labels=('Mínima Variância','Maior Retorno'))
+    ax4.legend(loc='best', shadow=True, fontsize='x-large')
 
     minimo = carteira_min_variancia['Retorno']
     minimo = minimo.tolist()
     risco = carteira_sharpe['Retorno']
     risco = risco.tolist()
+
+    lista_acoes_validas_sem_sufixo = [acao.replace('.SA', '') for acao in lista_acoes_validas]
 
     acaoMinRisc = []
     for j in lista_acoes_validas:
@@ -122,10 +123,14 @@ def carrega_dados(request, acao):
     data2 = [round(k,4) for k in acaoMinRisc]
     data = [str(d) for d in data2]
 
+    # recipe = []
+    # for a,b in zip(acoes,data):
+    #     recipe.append(a+' '+b)
+
     recipe = []
-    for a,b in zip(acoes,data):
+    for a,b in zip(lista_acoes_validas_sem_sufixo,data):
         recipe.append(a+' '+b)
-        
+
     data = [float(x.split()[1]) for x in recipe]
     ingredients = [x.split()[0] for x in recipe]
 
@@ -151,7 +156,7 @@ def carrega_dados(request, acao):
     data4 = [str(d) for d in data3]
 
     recipe_Sharpe = []
-    for a,b in zip(acoes,data4):
+    for a,b in zip(lista_acoes_validas_sem_sufixo,data4):
         recipe_Sharpe.append(a+' '+b)
         
     data4 = [float(x.split()[1]) for x in recipe_Sharpe]
@@ -207,18 +212,6 @@ def carrega_dados(request, acao):
     ax1.axis("off")
     ax3.axis("off")
     ax5.axis("off")
-
-    
-    # Construa a imagem no buffer
-    # buffer = BytesIO()
-    # canvas = fig.canvas
-    # canvas.draw()
-    # pilImage = PIL.Image.frombytes("RGBA", canvas.get_width_height(), canvas.tostring_argb())
-    # pilImage = pilImage.convert('RGB')
-    # pilImage.save(buffer, "PNG")
-    # plt.close(fig)
-
-    # return HttpResponse(buffer.getvalue(), content_type="image/png")  
 
     # Ajusta layout para não cortar textos
     plt.tight_layout(rect=[0, 0, 1, 0.96])  # reserva 4% no topo para textos
