@@ -74,44 +74,48 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   </div>
 </footer>
 <script>
-    function funcao(){
-        
-        var img = new Image();
-        var loading = new Image();
-        img_home.innerHTML= "";
-        //var downloadingImage = $("<img>");
-        loading.src = "http://i.stack.imgur.com/FhHRx.gif";
-        
-        $('html, body').animate({
-                            scrollTop: parseInt($("#img_loading").offset().top)
-                        }, 1000);       
-                        
-        let acao = $('#acao').val(); 
-        img.src ="http://bcamera.pythonanywhere.com/"+acao+"/fronteira_eficiente";
-        if (img.complete || img.readyState === 4) {
-          img_home.appendChild(img);   
-         $('html, body').animate({
-              scrollTop: parseInt($("#img_home").offset().top)
-          }, 1000);      
-          img_loading.innerHTML= "";         
+function funcao(){
+    var acao = $('#acao').val();
+    // Construa a URL usando a URL local
+    var url_fronteira_eficiente = "/" + acao + "/fronteira_eficiente";
+
+    var img = new Image();
+    var loading = new Image();
+    
+    img_home.innerHTML= "";
+    loading.src = "http://i.stack.imgur.com/FhHRx.gif";
+    
+    $('html, body').animate({
+        scrollTop: parseInt($("#img_loading").offset().top)
+    }, 1000);
+    
+    // Altere a linha abaixo para usar a URL local
+    img.src = url_fronteira_eficiente;
+
+    if (img.complete || img.readyState === 4) {
+      img_home.appendChild(img);
+      $('html, body').animate({
+          scrollTop: parseInt($("#img_home").offset().top)
+      }, 1000);
+      img_loading.innerHTML= "";
+    }
+    else {
+      img_loading.appendChild(loading);
+      $(img).on('load',function (response, status, xhr) {
+        if (status == 'error') {
+          console.log('erro');
+          img_loading.innerHTML= "";
+          img_home.innerHTML= "";
         }
         else {
-          img_loading.appendChild(loading); 
-          $(img).on('load',function (response, status, xhr) {
-            if (status == 'error') {
-              console.log('erro');
-              img_loading.innerHTML= "";
-              img_home.innerHTML= "";
-            }
-            else {
-              img_home.appendChild(img);
-               $('html, body').animate({
-                    scrollTop: parseInt($("#img_home").offset().top)
-                }, 1000);                 
-              img_loading.innerHTML= "";  
-            }
-        })
+          img_home.appendChild(img);
+           $('html, body').animate({
+                scrollTop: parseInt($("#img_home").offset().top)
+            }, 1000);
+          img_loading.innerHTML= "";
+        }
+      })
     }
-  }
+}
 </script>
 {% endblock %}
